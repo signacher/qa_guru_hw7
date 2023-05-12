@@ -9,26 +9,14 @@ import os.path
 import requests
 from pypdf import PdfReader
 import xlrd
-
-
-# TODO оформить в тест, добавить ассерты и использовать универсальный путь
-def test_csv_file():
-    with open('resources/eggs.csv', 'w') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerow(['Anna', 'Pavel', 'Peter'])
-        csvwriter.writerow(['Alex', 'Serj', 'Yana'])
-
-    with open('resources/eggs.csv') as csvfile:
-        csvreader = csv.reader(csvfile)
-        for row in csvreader:
-            print(row)
+from os_path_scripts import RESOURCES_PATH
 
 
 # TODO оформить в тест, добавить ассерты и использовать универсальный путь к tmp
 def test_download_file_from_browser():
     options = webdriver.ChromeOptions()
     prefs = {
-        "download.default_directory": '/Users/kot/GitHubProjects/qa-guru/qa_guru_python_5_7_files',
+        "download.default_directory": RESOURCES_PATH,
         "download.prompt_for_download": False
     }
     options.add_experimental_option("prefs", prefs)
@@ -38,6 +26,7 @@ def test_download_file_from_browser():
     browser.open("https://github.com/pytest-dev/pytest")
     browser.element(".d-none .Button-label").click()
     browser.element('[data-open-app="link"]').click()
+
 
 # TODO сохранять и читать из tmp, использовать универсальный путь
 def test_downloaded_file_size():
@@ -50,6 +39,24 @@ def test_downloaded_file_size():
     size = os.path.getsize('selenium_logo.png')
 
     assert size == 30803
+
+
+# TODO оформить в тест, добавить ассерты и использовать универсальный путь
+def test_csv_file():
+    users = []
+    csv_file_path=os.path.join(RESOURCES_PATH,'resources','eggs.csv')
+    with open(csv_file_path, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerow(['Anna', 'Pavel', 'Peter'])
+        csvwriter.writerow(['Alex', 'Serj', 'Yana'])
+
+    with open(csv_file_path) as csvfile:
+        csvreader = csv.reader(csvfile)
+
+        for row in csvreader:
+            users.append(row)
+            print(row)
+    assert users[0] == ['Anna', 'Pavel', 'Peter']
 
 
 # TODO оформить в тест, добавить ассерты и использовать универсальный путь
