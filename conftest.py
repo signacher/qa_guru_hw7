@@ -1,4 +1,6 @@
 import os
+import shutil
+
 import pytest
 from os_path_scripts import TMP_PATH
 
