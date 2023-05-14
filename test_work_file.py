@@ -1,4 +1,5 @@
 import csv
+import time
 import zipfile
 from openpyxl import load_workbook
 from selenium import webdriver
@@ -12,6 +13,7 @@ from os_path_scripts import RESOURCES_PATH, TMP_PATH
 
 # TODO оформить в тест, добавить ассерты и использовать универсальный путь к tmp
 def test_download_file_from_browser():
+    DOWNLOAD_FILE_PATH = os.path.join(TMP_PATH, 'pytest-main.zip')
     options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory": TMP_PATH,
@@ -24,6 +26,10 @@ def test_download_file_from_browser():
     browser.open("https://github.com/pytest-dev/pytest")
     browser.element(".d-none .Button-label").click()
     browser.element('[data-open-app="link"]').click()
+    time.sleep(3)
+    size = os.path.getsize(DOWNLOAD_FILE_PATH)
+
+    assert size == 1567139
 
 
 # TODO сохранять и читать из tmp, использовать универсальный путь
